@@ -1,7 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 exports.Google = function() {
-  var map;
-  var infowindow;
+  // var map;
+  // var infowindow;
+  // var pyrmont;
 };
 
 exports.Google.prototype.initMap = function() {
@@ -62,22 +63,38 @@ exports.Google.prototype.bicycle = function() {
   var bikeLayer = new google.maps.BicyclingLayer();
   bikeLayer.setMap(map);
 }
-
+var pyrmont;
 exports.Google.prototype.bars = function() {
-  var pyrmont = {lat: 37.7833, lng: -122.4167};
-
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: pyrmont,
-    zoom: 15
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 14,
+    center: {lat: 42.3726399, lng: -71.1096528}
   });
 
-  infowindow = new google.maps.InfoWindow();
-  var service = new google.maps.places.PlacesService(map);
-  service.nearbySearch({
-    location: pyrmont,
-    radius: 500,
-    type: ['bar']
-  }, callback);
+  var infoWindow = new google.maps.InfoWindow({map: map});
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+        pyrmont = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        infoWindow.setPosition(pyrmont);
+        infoWindow.setContent('Location found.');
+        // map.setCenter(pyrmont);
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: pyrmont,
+          zoom: 15
+        });
+        console.log(pyrmont);
+        infowindow = new google.maps.InfoWindow();
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: pyrmont,
+          radius: 500,
+          type: ['bar']
+        }, callback);
+
+  });
+
 }
 
  function callback(results, status) {
