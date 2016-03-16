@@ -79,7 +79,7 @@ exports.Google.prototype.bars = function() {
         };
         infoWindow.setPosition(pyrmont);
         infoWindow.setContent('Location found.');
-        // map.setCenter(pyrmont);
+        map.setCenter(pyrmont);
         map = new google.maps.Map(document.getElementById('map'), {
           center: pyrmont,
           zoom: 15
